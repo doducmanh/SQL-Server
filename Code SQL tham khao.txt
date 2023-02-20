@@ -1,0 +1,287 @@
+[SQL_SV65].
+[SQL_SV64].
+[SQL_SV65].[PowerBI].[DPO].[Main_AD_STRUCTURE_FULL]
+
+-----xóa bảng
+DROP TABLE table_name;
+
+-----xóa dữ liệu trên bảng
+DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste'
+
+-----tạo bảng
+CREATE TABLE T_AD_BONUS_PROBATION (
+    [AD_Code] nvarchar(255),
+    [ADName] nvarchar(255),
+    [AD_Grade] nvarchar(255),
+	[Appointed_Date] date,
+	iDATE_APPOINTED date,
+	iDATE_TARGET date,
+	TGT_PROBA float,
+	SUM_FYPincTopup_PROBA float,
+	SUM_FYP_COUNT_BONUS_PROBA float,
+	FYP_OVER_PROBA float,
+	FYP_OVER_PROBA_DIV2 float,
+	MTH_ADDTO_1 date,
+	MTH_ADDTO_2 date,
+	REPORT_MONTH varchar(6)
+);
+
+-----thêm dữ liệu vào bảng mới
+SELECT column1, column2, column3, ...
+INTO newtable [IN externaldb]
+FROM oldtable
+WHERE condition;
+
+-----thêm dữ liệu vào bảng có sẵn
+INSERT INTO table2 (column1, column2, column3, ...)
+SELECT column1, column2, column3, ...
+FROM table1
+WHERE condition;
+
+------cập nhật thông tin bảng
+UPDATE Customers
+SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
+WHERE CustomerID = 1;
+
+UPDATE [dbo].[T_AD_FYP_K2_MTHLY]
+SET [FYPincTopup] = 672617700
+WHERE [AD_Code] = 'AD316' AND [REPORT_MONTH] = '202212';
+GO
+UPDATE [dbo].[T_AD_FYP_K2_MTHLY]
+SET [ACHIEVED_TARGET_FYP] = [FYPincTopup] / [TargetFYP]
+WHERE [AD_Code] = 'AD316' AND [REPORT_MONTH] = '202212';
+
+UPDATE [dbo].[T_AD_BONUS_DETAIL_FYP]
+SET [10% TOPUP] = 0, 
+	[FYPincTopup]= 0, 
+	[FYP_COUNT_BONUS] = 0
+WHERE [REPORT_MONTH] = '202211'
+AND [Policy No] = '80079886'
+
+EXEC REVISE_WITHDRAW_TOPUP_AFTER_12M '20221231', '80098268', 0, 'AD316'
+
+ALTER PROCEDURE [dbo].[REVISE_WITHDRAW_TOPUP_AFTER_12M] 
+	(@varCollected_Date nvarchar(4000), --yyyyMMdd
+	@varPOL_NO nvarchar(4000), 
+	@varTOPUP_REVISE float,
+	@varAD_CODE nvarchar(4000)) 
+----tạo view
+CREATE VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+
+----thêm dữ liệu từ stored procedure
+INSERT INTO [dbo].[T_AD_BONUS_PROBATION]  
+EXEC AD_BONUS_PROBATION '2022-07-01'
+
+-----tạo stored procedure
+USE DP_Manh
+GO
+CREATE PROCEDURE SelectCustomerstabledata 
+AS 
+BEGIN
+     SELECT * 
+     FROM Testdb.Customers 
+END;
+
+-----tạo stored procedure với tham số đầu vào
+USE DP_Manh
+GO
+CREATE PROCEDURE SelectCustomerstabledata (@varREPORT_MONTH nvarchar(4000)) 
+AS 
+BEGIN
+     SELECT * 
+     FROM Testdb.Customers 
+     WHERE AGE >= @AGE
+END;
+
+-----xóa stored procedure
+DROP PROCEDURE sp_name;
+# or
+DROP PROC sp_name
+
+----thực thi stored procedure
+EXEC SelectCustomerstabledata 25;
+
+----open query từ linked server
+SELECT * FROM OPENQUERY (SQL_SV65, 
+	'SELECT * 
+	FROM [PowerBI].[DPO].[Main_AD_STRUCTURE_FULL] 
+	WHERE [ExplodedDate] = ''2022-07-01'''
+
+----sau khi restorer database vào bảng khác
+RESTORE DATABASE <database name> WITH RECOVERY
+
+
+----lấy các bảng cut-off
+, CUSTOMER_INFO_CO AS (
+	SELECT *
+	FROM [dbo].[T_Main_CUSTOMER_INFO_CUTOFF]
+	WHERE [CUTOFF] = '20220731'
+)
+, AD_STRUCTURE AS (
+	SELECT 
+		AD_STRUCTURE2.[TERRITORY],
+		AD_STRUCTURE1.*
+	FROM (SELECT * FROM OPENQUERY (SQL_SV65, 
+	'SELECT * 
+	FROM [PowerBI].[DPO].[Main_AD_STRUCTURE_FULL] 
+	WHERE [ExplodedDate] = ''2022-07-01''')) AS AD_STRUCTURE1
+	LEFT JOIN [dbo].[T_Main_TERRITORIES] AS AD_STRUCTURE2
+	ON AD_STRUCTURE1.[Territory_Code] = AD_STRUCTURE2.[CODE]
+)
+
+AD_STRUCTURE AS (
+	SELECT 
+		AD_STRUCTURE2.[TERRITORY],
+		AD_STRUCTURE1.*
+	FROM (SELECT *
+		  FROM [SQL_SV65].[PowerBI].[DPO].[Main_AD_STRUCTURE_FULL]
+		  WHERE [ExplodedDate]  = @varREPORT_MONTH) AS AD_STRUCTURE1
+	LEFT JOIN [dbo].[T_Main_TERRITORIES] AS AD_STRUCTURE2
+	ON AD_STRUCTURE1.[Territory_Code] = AD_STRUCTURE2.[CODE]
+)
+********XỬ LÝ NGÀY THÁNG***************************************
+----get day from datetime
+SELECT DAY('2017/08/25') AS DayOfMonth;
+
+----
+FORMAT([Collected Date], 'yyyyMM')
+FORMAT([Collected Date], 'yyyyMMdd')
+----
+DATEADD(month, -2, iDATE_TARGET)
+	day
+	year
+----chuyển chuỗi thành ngày tháng
+CAST('2017-08-25' AS date);
+----
+SELECT DATEDIFF(month, '2017/08/25', '2011/08/25') AS DateDiff;
+
+----
+EOMONTH(@varREPORT_MONTH)
+---- start of month
+SELECT DATEADD(month, DATEDIFF(month, 0, @mydate), 0) AS StartOfMonth
+----
+FORMAT(CAST(@varREPORT_MONTH AS date), 'yyyyMM') AS REPORT_MONTH
+
+----sửa lỗi datediff cho năm
+FLOOR(DATEDIFF(m, A.RISK_COMMENCE_DATE, A.CURRENT_DUE_DATE)/12) + 1 AS POL_YEAR_DP,
+
+
+------
+DATEFROMPARTS(YEAR(A01.[Appointed_Date]), MONTH(A01.[Appointed_Date]), 01)
+
+
+**************************************************************
+----sửa lỗi Cannot resolve the collation conflict between 
+"SQL_Latin1_General_CP1_CI_AS" and "Latin1_General_CI_AS" in the equal to operation
+
+--kiểm tra collation name của từng bảng:
+USE DP_Manh
+GO
+SELECT
+    col.name, col.collation_name
+FROM 
+    sys.columns col
+WHERE
+    object_id = OBJECT_ID('T_AD_BONUS_PROBATION')
+
+--sửa lại bảng cho khớp collation name:
+ALTER TABLE [T_AD_BONUS_PROBATION]
+  ALTER COLUMN [AD_Code]
+    VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+
+sStatus_date = Format(.Cells(iRowNo, 11), "yyyy-mm-dd")
+
+----
+,ROUND(CAST(SUM([Collected]) AS FLOAT) / CAST(SUM([Original Pre]) AS FLOAT), 2) AS PY2_RATE
+
+----kiểm tra thời gian update lần cuối của các bảng
+
+CREATE FUNCTION fn_TablesLastUpdateDate(@Date NVARCHAR(20))
+
+RETURNS @table TABLE(TableName NVARCHAR(40), LastUpdated Datetime)
+
+AS
+
+BEGIN
+
+
+IF(@Date='') OR (@Date Is Null) OR (@Date='0')
+
+    BEGIN
+        INSERT INTO @table
+        SELECT TOP 100 PERCENT TABLENAME,LASTUPDATED FROM 
+        (
+            SELECT  B.NAME AS 'TABLENAME', MAX(STATS_DATE (ID,INDID)) AS LASTUPDATED
+            FROM    SYS.SYSINDEXES AS A
+                    INNER JOIN SYS.OBJECTS AS B ON A.ID = B.OBJECT_ID
+            WHERE   B.TYPE = 'U'  AND STATS_DATE (ID,INDID) IS NOT NULL 
+            GROUP BY B.NAME
+        ) AS A
+        ORDER BY LASTUPDATED DESC
+    END
+ELSE
+
+    BEGIN
+        INSERT INTO @table
+        SELECT TOP 100 PERCENT TABLENAME,LASTUPDATED FROM 
+        (
+            SELECT  B.NAME AS 'TABLENAME', MAX(STATS_DATE (ID,INDID)) AS LASTUPDATED,
+                    CONVERT(VARCHAR, MAX(STATS_DATE (ID,INDID)), 103) as Date
+            FROM    SYS.SYSINDEXES AS A
+                    INNER JOIN SYS.OBJECTS AS B ON A.ID = B.OBJECT_ID
+            WHERE   B.TYPE = 'U'  AND STATS_DATE (ID,INDID) IS NOT NULL 
+            GROUP BY B.NAME
+        ) AS A
+        WHERE Date=@Date
+        ORDER BY LASTUPDATED DESC
+    END
+RETURN
+
+END
+
+-- SELECT * from fn_TablesLastUpdateDate('06/11/2012')
+
+----cập nhật Main_AD_STRUCTURE_FULL
+USE PowerBI
+GO
+DELETE 
+FROM [DPO].[Main_AD_STRUCTURE_FULL]
+GO
+INSERT INTO [DPO].[Main_AD_STRUCTURE_FULL]
+SELECT *
+FROM [DPO].[AD_STRUCTURE]
+
+-----
+USE AdventureWorks2008R2;
+GO
+SELECT SalesOrderID, ProductID, OrderQty
+    ,SUM(OrderQty) OVER(PARTITION BY SalesOrderID) AS 'Total'
+    ,AVG(OrderQty) OVER(PARTITION BY SalesOrderID) AS 'Avg'
+    ,COUNT(OrderQty) OVER(PARTITION BY SalesOrderID) AS 'Count'
+    ,MIN(OrderQty) OVER(PARTITION BY SalesOrderID) AS 'Min'
+    ,MAX(OrderQty) OVER(PARTITION BY SalesOrderID) AS 'Max'
+FROM Sales.SalesOrderDetail 
+WHERE SalesOrderID IN(43659,43664);
+------
+(F2.SUM_Y2_ACTUAL_PREM/ NULLIF(F2.SUM_Y2_EXPECTED_PREM, 0)) AS K2,
+
+----CUT-OFF 2022----
+20220127
+20220228
+20220329
+20220429
+20220531
+20220630
+20220731
+20220831
+20220930
+20221031
+
+
+
+
+
+
