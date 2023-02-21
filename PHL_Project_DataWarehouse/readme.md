@@ -12,9 +12,11 @@
 - Visualization: Power BI Desktop Report Server
 
 <b>Data flow</b>:
+-
 ![image](https://user-images.githubusercontent.com/59658937/220245860-8250480f-ee26-4f46-b01d-12ffbd39354d.png)
 
 <b>Model</b>:
+-
 *Due to the company's privacy policy, I cannot share the data details.
 
 ![image](https://user-images.githubusercontent.com/59658937/220243718-e5d95d67-39a1-4e98-a0a6-f7b42c4b45a6.png)
