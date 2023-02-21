@@ -7,12 +7,16 @@
 - DAX function
 
 **Due to the company's privacy policy, I cannot share the data details.*
+- 
 <b>Model & Measures:</b>
 -
 ![image](https://user-images.githubusercontent.com/59658937/220310358-a826cb54-f3aa-4d9c-a8df-3497b2a89acf.png)
 -
 ![image](https://user-images.githubusercontent.com/59658937/220310559-8daf973a-b77e-48df-932d-3c0fa8aed147.png)
 -
+<b>Calculated Tables/ Calculated Columns:</b>
+-![image](https://user-images.githubusercontent.com/59658937/220312269-99b4ee1a-368f-4e7b-b667-e2ffa60cbfca.png)
+
 <b>Manage Roles and Security:</b>
 -
 ![image](https://user-images.githubusercontent.com/59658937/220310675-94b1a3e4-aa09-42a9-b15b-bde7409b1da7.png)
