@@ -1,12 +1,12 @@
 <b>Summary</b>:
 - Our company have many data sources from excel (almost), outlook, CORE system,...
-- With data from excel, outlook,... we conduct ETL by VBA(macro) then insert tables to database.
+- With data from excel, outlook,... we conduct ETL by VBA(macro), Power Query, then insert tables to database.
 - IT provide 11 main tables for my deparment, they will run job insert/delete to refresh table everyday.
 - From all above data sources, our team build DW, Star Schema, Snowflake Schema model for my deparment based on business rules.
 - We create Views, Stored procedure, Functions, Table,....Store procedure run job to add data to tables daily.
 
 <b>Tool</b>:
-- Data Processing, ETL: VBA(macro), SSMS.
+- Data Processing, ETL: VBA(macro), Power Query, SSMS.
 - Database: SQL Server
 - Analysis service: SSAS, Visual Studio (Tabular Model)
 - Visualization: Power BI Desktop Report Server
