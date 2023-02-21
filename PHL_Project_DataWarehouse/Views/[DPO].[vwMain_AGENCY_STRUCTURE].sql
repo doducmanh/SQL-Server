@@ -1,0 +1,81 @@
+USE [PowerBI]
+GO
+
+/****** Object:  View [DPO].[vwMain_AGENCY_STRUCTURE]    Script Date: 30/09/2022 16:46:30 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE VIEW [DPO].[vwMain_AGENCY_STRUCTURE] AS
+SELECT [ID_AD_Current]
+      ,[AD_Code_Current]
+      ,[AD_Office_Current]
+      ,[ID_AD]
+      ,[AD_Code]
+      ,[AD_Office]
+      ,[ExplodedDate]
+      ,[ID]
+      ,[RM]
+      ,[DM]
+      ,[FM]
+      ,[Agent_Number]
+      ,[GRADE]
+      ,[L1]
+      ,[L1G]
+      ,[L2]
+      ,[L2G]
+      ,[L3]
+      ,[L3G]
+      ,[L4]
+      ,[L4G]
+      ,[L5]
+      ,[L5G]
+      ,[L6]
+      ,[L6G]
+      ,[L7]
+      ,[L7G]
+      ,[L8]
+      ,[L8G]
+      ,[L9]
+      ,[L9G]
+      ,[L10]
+      ,[L10G]
+      ,[L0R]
+      ,[INDEX_LEADER]
+      ,[L1 Direct]
+      ,[L2 Direct]
+      ,[L3 Direct]
+      ,[L4 Direct]
+      ,[L5 Direct]
+      ,[L6 Direct]
+      ,[L7 Direct]
+      ,[L8 Direct]
+      ,[L9 Direct]
+      ,[L10 Direct]
+      ,[SFC]
+      ,[SFC_MARK_IT]
+      ,[Date_Appointed]
+      ,[Terminated_date]
+      ,[RM_Date_Appointed]
+      ,[DM_Date_Appointed]
+      ,[FM_Date_Appointed]
+      ,[Agent_Name]
+      ,[Agent_Status]
+      ,[GM]
+      ,[GM_Agent_Name]
+      ,[GM_Date_Appointed]
+      ,[GM_Agent_Status]
+      ,[RM_Agent_Name]
+      ,[RM_Agent_Status]
+      ,[DM_Agent_Name]
+      ,[DM_Agent_Status]
+      ,[FM_Agent_Name]
+      ,[FM_Agent_Status]
+  FROM [PowerBI].[DPO].[Main_AGENCY_STRUCTURE]
+GO
+
+
