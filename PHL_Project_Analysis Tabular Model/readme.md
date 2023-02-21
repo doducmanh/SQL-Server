@@ -16,7 +16,7 @@
 <b>Manage Roles and Security:</b>
 -
 ![image](https://user-images.githubusercontent.com/59658937/220310675-94b1a3e4-aa09-42a9-b15b-bde7409b1da7.png)
--add/delete member to role:
+- add/delete member to role:
 ![image](https://user-images.githubusercontent.com/59658937/220310909-4a90d906-7ce0-4f46-88ab-6f8019986048.png)
--manage role's user by Row Level Security:
+- manage role's user by Row Level Security:
 ![image](https://user-images.githubusercontent.com/59658937/220311188-4b511e39-f732-40df-93db-09d275ebcd07.png)
