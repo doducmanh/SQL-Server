@@ -11,6 +11,9 @@
 - Analysis service: SSAS, Visual Studio (Tabular Model)
 - Visualization: Power BI Desktop Report Server
 
+<b>Data flow</b>:
+![image](https://user-images.githubusercontent.com/59658937/220245860-8250480f-ee26-4f46-b01d-12ffbd39354d.png)
+
 <b>Model</b>:
 *Due to the company's privacy policy, I cannot share the data details.
 
